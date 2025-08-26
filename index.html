@@ -299,8 +299,8 @@
             function hideTypingIndicator() { const indicator = document.getElementById('typing-indicator'); if (indicator) indicator.remove(); }
             function addBotMessage(text) { return new Promise(resolve => { setTimeout(() => { const messageDiv = document.createElement('div'); messageDiv.className = 'chat-message self-start max-w-xs'; const contentDiv = document.createElement('div'); contentDiv.className = 'bg-blue-600/80 text-white p-3 rounded-t-xl rounded-br-xl'; contentDiv.innerHTML = text.replace(/\*(.*?)\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>'); messageDiv.appendChild(contentDiv); chatWindow.appendChild(messageDiv); chatWindow.scrollTop = chatWindow.scrollHeight; resolve(); }, 800); }); }
             function addUserMessage(text) { const messageDiv = document.createElement('div'); messageDiv.className = 'chat-message self-end max-w-xs'; const contentDiv = document.createElement('div'); contentDiv.className = 'bg-slate-600/80 text-white p-3 rounded-t-xl rounded-bl-xl'; contentDiv.textContent = text; messageDiv.appendChild(contentDiv); chatWindow.appendChild(messageDiv); chatWindow.scrollTop = chatWindow.scrollHeight; }
-            function addPixCode() { return new Promise(resolve => { setTimeout(() => { const pixDiv = document.createElement('div'); pixDiv.className = 'chat-message self-start w-full'; pixDiv.innerHTML = `<div class="bg-slate-900/80 p-3 rounded-lg text-center"><pre class="text-xs text-gray-300 whitespace-pre-wrap break-all">00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5925GABRIEL PACHIS AUTOMATION6009SAO PAULO62070503***6304E4A9</pre><button onclick="copyPix(event)" class="mt-2 bg-slate-700 hover:bg-slate-600 text-white text-sm py-1 px-3 rounded-md transition-colors">Copiar Código</button></div>`; chatWindow.appendChild(pixDiv); chatWindow.scrollTop = chatWindow.scrollHeight; resolve(); }, 600); }); }
-            window.copyPix = function(event) { const pixCode = "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5925GABRIEL PACHIS AUTOMATION6009SAO PAULO62070503***6304E4A9"; const tempInput = document.createElement('textarea'); tempInput.value = pixCode; document.body.appendChild(tempInput); tempInput.select(); document.execCommand('copy'); document.body.removeChild(tempInput); const btn = event.target; const originalText = btn.textContent; btn.textContent = 'Copiado!'; btn.classList.add('bg-green-500'); setTimeout(() => { btn.textContent = originalText; btn.classList.remove('bg-green-500'); }, 2000); }
+            function addPixCode() { return new Promise(resolve => { setTimeout(() => { const pixDiv = document.createElement('div'); pixDiv.className = 'chat-message self-start w-full'; pixDiv.innerHTML = `<div class="bg-slate-900/80 p-3 rounded-lg text-center"><pre class="text-xs text-gray-300 whitespace-pre-wrap break-all">00020126580014br.gov.bcb.pix0136123e4567-e-89b-12d3-a456-4266141740005204000053039865802BR5925GABRIEL PACHIS AUTOMATION6009SAO PAULO62070503***6304E4A9</pre><button onclick="copyPix(event)" class="mt-2 bg-slate-700 hover:bg-slate-600 text-white text-sm py-1 px-3 rounded-md transition-colors">Copiar Código</button></div>`; chatWindow.appendChild(pixDiv); chatWindow.scrollTop = chatWindow.scrollHeight; resolve(); }, 600); }); }
+            window.copyPix = function(event) { const pixCode = "00020126580014br.gov.bcb.pix0136123e4567-e-89b-12d3-a456-4266141740005204000053039865802BR5925GABRIEL PACHIS AUTOMATION6009SAO PAULO62070503***6304E4A9"; const tempInput = document.createElement('textarea'); tempInput.value = pixCode; document.body.appendChild(tempInput); tempInput.select(); document.execCommand('copy'); document.body.removeChild(tempInput); const btn = event.target; const originalText = btn.textContent; btn.textContent = 'Copiado!'; btn.classList.add('bg-green-500'); setTimeout(() => { btn.textContent = originalText; btn.classList.remove('bg-green-500'); }, 2000); }
             function showOptions(options, plan) { buttonArea.innerHTML = ''; const buttonContainer = document.createElement('div'); buttonContainer.className = 'grid grid-cols-1 gap-2'; options.forEach(option => { const button = document.createElement('button'); button.className = 'w-full text-left p-3 rounded-lg transition-colors text-sm font-medium bg-slate-700/50 hover:bg-slate-600/50 text-white'; if (option.action === 'openLink') { button.textContent = option.text; button.onclick = () => alert("Em um bot real, isso abriria um link externo."); } else { button.textContent = option.text; button.onclick = () => handleAction(option.action, option.plan || plan); } buttonContainer.appendChild(button); }); buttonArea.appendChild(buttonContainer); }
             async function handleAction(actionName, plan) { if (actionName === 'start') { chatWindow.innerHTML = ''; buttonArea.innerHTML = ''; } const step = conversation[actionName]; if (!step) return; if (step.userMessage) { const userMsg = typeof step.userMessage === 'function' ? step.userMessage(plan) : step.userMessage; addUserMessage(userMsg); } buttonArea.innerHTML = ''; showTypingIndicator(); for (const msg of step.botMessages) { await addBotMessage(msg); } hideTypingIndicator(); if (step.showPix) await addPixCode(); if (step.options) showOptions(step.options, plan); }
             handleAction('start');
@@ -310,50 +310,46 @@
             const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }); }, { threshold: 0.1 });
             animatedElements.forEach(el => observer.observe(el));
 
-            // CORREÇÃO: Animação de texto letra por letra
+            // CORREÇÃO FINAL: Animação de texto letra por letra
             const headline = document.getElementById('main-headline');
             const childNodes = Array.from(headline.childNodes);
             headline.innerHTML = '';
             let charIndex = 0;
 
+            const createWordSpan = (word) => {
+                const wordSpan = document.createElement('span');
+                wordSpan.style.display = 'inline-block'; // Impede a quebra de linha dentro da palavra
+                word.split('').forEach(char => {
+                    const span = document.createElement('span');
+                    span.className = 'animated-letter';
+                    span.textContent = char;
+                    span.style.animationDelay = `${charIndex * 0.03}s`;
+                    wordSpan.appendChild(span);
+                    charIndex++;
+                });
+                return wordSpan;
+            };
+
             childNodes.forEach(node => {
                 if (node.nodeType === Node.TEXT_NODE) {
                     const text = node.textContent;
-                    // Divide o texto por espaços, mas mantém os espaços no array
-                    const parts = text.split(/(\s+)/);
+                    const parts = text.split(/(\s+)/); // Mantém os espaços
                     parts.forEach(part => {
                         if (part.match(/\s+/)) {
-                            // Se for um espaço, apenas adiciona
                             headline.appendChild(document.createTextNode(part));
-                        } else {
-                            // Se for uma palavra, anima as letras
-                            part.split('').forEach(char => {
-                                const span = document.createElement('span');
-                                span.className = 'animated-letter';
-                                span.textContent = char;
-                                span.style.animationDelay = `${charIndex * 0.03}s`;
-                                headline.appendChild(span);
-                                charIndex++;
-                            });
+                        } else if (part.length > 0) {
+                            headline.appendChild(createWordSpan(part));
                         }
                     });
                 } else if (node.nodeType === Node.ELEMENT_NODE) {
-                    // Recria o elemento (ex: o <span>)
-                    const wrapperSpan = node.cloneNode(false);
+                    const wrapperSpan = node.cloneNode(false); // Clona o <span> estilizado
                     const text = node.textContent;
                     const parts = text.split(/(\s+)/);
-                     parts.forEach(part => {
+                    parts.forEach(part => {
                         if (part.match(/\s+/)) {
                             wrapperSpan.appendChild(document.createTextNode(part));
-                        } else {
-                            part.split('').forEach(char => {
-                                const span = document.createElement('span');
-                                span.className = 'animated-letter';
-                                span.textContent = char;
-                                span.style.animationDelay = `${charIndex * 0.03}s`;
-                                wrapperSpan.appendChild(span);
-                                charIndex++;
-                            });
+                        } else if (part.length > 0) {
+                            wrapperSpan.appendChild(createWordSpan(part));
                         }
                     });
                     headline.appendChild(wrapperSpan);
