@@ -13,14 +13,16 @@
             font-family: 'Inter', sans-serif;
             background-color: #020617; /* slate-950 */
         }
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
         .text-glow {
             text-shadow: 0 0 8px rgba(59, 130, 246, 0.7), 0 0 20px rgba(59, 130, 246, 0.5);
-        }
-        .bg-grid {
-            background-image:
-                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
         }
         .chat-message {
             opacity: 0;
@@ -33,17 +35,16 @@
                 transform: translateY(0);
             }
         }
-        /* Efeito Aurora no fundo do Hero */
         .aurora-bg {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 150%;
-            padding-top: 150%; /* Mantém a proporção */
+            padding-top: 150%;
             background: 
-                radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.2) 0%, transparent 35%),
-                radial-gradient(circle at 80% 70%, rgba(34, 211, 238, 0.15) 0%, transparent 35%);
+                radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.15) 0%, transparent 35%),
+                radial-gradient(circle at 80% 70%, rgba(34, 211, 238, 0.1) 0%, transparent 35%);
             animation: aurora-move 20s infinite linear;
             filter: blur(100px);
             will-change: transform;
@@ -52,7 +53,6 @@
             0% { transform: translate(-50%, -50%) rotate(0deg); }
             100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
-        /* Animação de scroll */
         .scroll-animate {
             opacity: 0;
             transform: translateY(30px);
@@ -63,7 +63,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-        /* Indicador de "digitando..." */
         .typing-dot {
             width: 8px;
             height: 8px;
@@ -75,9 +74,30 @@
             0%, 80%, 100% { transform: scale(0); }
             40% { transform: scale(1.0); }
         }
+        /* Efeito Glassmorphism */
+        .glass-effect {
+            background: rgba(15, 23, 42, 0.6); /* slate-900 com 60% de opacidade */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Animação de texto letra por letra */
+        .animated-letter {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: letter-reveal 0.5s forwards;
+        }
+        @keyframes letter-reveal {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
-<body class="bg-slate-950 text-gray-200 bg-grid">
+<body class="bg-slate-950 text-gray-200">
+    <div id="particles-js"></div>
 
     <!-- Cabeçalho -->
     <header class="bg-slate-950/80 backdrop-blur-sm fixed top-0 left-0 right-0 z-50 border-b border-slate-800">
@@ -89,17 +109,17 @@
         </div>
     </header>
 
-    <main class="pt-24">
+    <main class="pt-24 relative z-10">
         <!-- Seção Hero -->
         <section id="hero" class="relative overflow-hidden container mx-auto px-6 py-20 text-center">
             <div class="aurora-bg -z-10"></div>
-            <h2 class="text-4xl md:text-6xl font-black text-white leading-tight">
+            <h2 id="main-headline" class="text-4xl md:text-6xl font-black text-white leading-tight">
                 Transforme seu Canal no Telegram em um <span class="text-blue-400 text-glow">Negócio Automatizado</span>
             </h2>
-            <p class="mt-6 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto">
+            <p class="mt-6 text-lg md:text-xl text-gray-400 max-w-3xl mx-auto scroll-animate">
                 Eu crio bots que gerenciam seus assinantes, processam pagamentos e liberam acesso ao seu conteúdo exclusivo. Tudo no piloto automático, 24 horas por dia.
             </p>
-            <div class="mt-10">
+            <div class="mt-10 scroll-animate" style="transition-delay: 100ms;">
                 <a href="#simulacao" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-lg text-lg transition-transform duration-300 hover:scale-105">
                     Veja um Bot em Ação
                 </a>
@@ -107,14 +127,14 @@
         </section>
 
         <!-- Seção de Simulação do Bot -->
-        <section id="simulacao" class="py-20 bg-slate-950/50">
+        <section id="simulacao" class="py-20">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
                     <h3 class="text-3xl md:text-4xl font-bold text-white">Simples para seu cliente, poderoso para você.</h3>
                     <p class="mt-4 text-gray-400 max-w-2xl mx-auto">Interaja com a simulação abaixo e veja a experiência exata que seu assinante terá para entrar no seu canal.</p>
                 </div>
-                <div class="max-w-md mx-auto bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 overflow-hidden">
-                    <div class="bg-slate-700 p-3 flex items-center">
+                <div class="max-w-md mx-auto rounded-2xl shadow-2xl overflow-hidden glass-effect">
+                    <div class="bg-slate-700/50 p-3 flex items-center">
                         <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center font-bold text-white text-xl">G</div>
                         <div class="ml-3">
                             <p class="font-bold text-white">Seu Bot de Vendas</p>
@@ -122,7 +142,52 @@
                         </div>
                     </div>
                     <div id="chat-window" class="p-4 h-96 overflow-y-auto space-y-4 flex flex-col"></div>
-                    <div id="button-area" class="p-4 border-t border-slate-700 bg-slate-800"></div>
+                    <div id="button-area" class="p-4 border-t border-slate-700/50"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Nova Seção: Como Funciona? -->
+        <section id="processo" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h3 class="text-3xl md:text-4xl font-bold text-white">Do Briefing ao Bot Ativo em 4 Passos</h3>
+                    <p class="mt-4 text-gray-400 max-w-2xl mx-auto">Meu processo é transparente e colaborativo para garantir que o resultado final seja perfeito para o seu negócio.</p>
+                </div>
+                <div class="relative">
+                    <!-- Linha do tempo -->
+                    <div class="hidden md:block absolute top-5 left-1/2 w-0.5 h-[calc(100%-2.5rem)] bg-slate-700 -translate-x-1/2"></div>
+                    <!-- Itens -->
+                    <div class="grid md:grid-cols-2 gap-x-12 gap-y-10">
+                        <!-- Passo 1 -->
+                        <div class="scroll-animate text-center md:text-right">
+                            <div class="inline-block bg-slate-800 text-blue-400 font-bold text-lg w-10 h-10 rounded-full flex items-center justify-center mb-4 border-2 border-slate-700">1</div>
+                            <h4 class="text-xl font-bold text-white mb-2">Reunião e Estratégia</h4>
+                            <p class="text-gray-400">Entendemos suas metas, definimos os planos, preços e a persona do seu bot. Alinhamos a estratégia de marketing e os gatilhos a serem usados.</p>
+                        </div>
+                        <div></div> <!-- Espaçador -->
+                        <div></div> <!-- Espaçador -->
+                        <!-- Passo 2 -->
+                        <div class="scroll-animate text-center md:text-left" style="transition-delay: 150ms;">
+                            <div class="inline-block bg-slate-800 text-blue-400 font-bold text-lg w-10 h-10 rounded-full flex items-center justify-center mb-4 border-2 border-slate-700">2</div>
+                            <h4 class="text-xl font-bold text-white mb-2">Desenvolvimento e Configuração</h4>
+                            <p class="text-gray-400">Eu codifico e configuro o bot com base na nossa estratégia. Integro com a API de pagamentos (Efí) e preparo toda a infraestrutura.</p>
+                        </div>
+                        <!-- Passo 3 -->
+                        <div class="scroll-animate text-center md:text-right" style="transition-delay: 300ms;">
+                            <div class="inline-block bg-slate-800 text-blue-400 font-bold text-lg w-10 h-10 rounded-full flex items-center justify-center mb-4 border-2 border-slate-700">3</div>
+                            <h4 class="text-xl font-bold text-white mb-2">Testes e Validação</h4>
+                            <p class="text-gray-400">Você recebe um acesso de teste para interagir com o bot, validar o fluxo, os textos e garantir que tudo está 100% como o planejado.</p>
+                        </div>
+                        <div></div> <!-- Espaçador -->
+                        <div></div> <!-- Espaçador -->
+                        <!-- Passo 4 -->
+                        <div class="scroll-animate text-center md:text-left" style="transition-delay: 450ms;">
+                            <div class="inline-block bg-slate-800 text-blue-400 font-bold text-lg w-10 h-10 rounded-full flex items-center justify-center mb-4 border-2 border-slate-700">4</div>
+                            <h4 class="text-xl font-bold text-white mb-2">Lançamento e Suporte</h4>
+                            <p class="text-gray-400">Com tudo aprovado, seu bot é ativado e está pronto para vender. Ofereço suporte contínuo para garantir que ele opere sem falhas.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -135,27 +200,18 @@
                     <p class="mt-4 text-gray-400">Foco no seu conteúdo, que da automação cuido eu.</p>
                 </div>
                 <div class="grid md:grid-cols-3 gap-8">
-                    <!-- Card 1 -->
-                    <div class="scroll-animate bg-slate-800 p-8 rounded-xl border border-slate-700 transition-transform duration-300 hover:scale-105 hover:border-blue-500">
-                        <div class="bg-slate-700 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
-                        </div>
+                    <div class="scroll-animate p-8 rounded-xl transition-transform duration-300 hover:scale-105 glass-effect">
+                        <div class="bg-slate-700/50 w-12 h-12 rounded-lg flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg></div>
                         <h4 class="text-xl font-bold text-white">Pagamentos Integrados</h4>
                         <p class="mt-2 text-gray-400">Integração direta com a API do Efí Bank para gerar PIX e confirmar pagamentos automaticamente.</p>
                     </div>
-                    <!-- Card 2 -->
-                    <div class="scroll-animate bg-slate-800 p-8 rounded-xl border border-slate-700 transition-transform duration-300 hover:scale-105 hover:border-blue-500" style="transition-delay: 100ms;">
-                        <div class="bg-slate-700 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
-                        </div>
+                    <div class="scroll-animate p-8 rounded-xl transition-transform duration-300 hover:scale-105 glass-effect" style="transition-delay: 100ms;">
+                        <div class="bg-slate-700/50 w-12 h-12 rounded-lg flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg></div>
                         <h4 class="text-xl font-bold text-white">Gestão de Acesso</h4>
                         <p class="mt-2 text-gray-400">Seu bot cria links de convite únicos e de uso limitado. Acesso liberado apenas para quem paga.</p>
                     </div>
-                    <!-- Card 3 -->
-                    <div class="scroll-animate bg-slate-800 p-8 rounded-xl border border-slate-700 transition-transform duration-300 hover:scale-105 hover:border-blue-500" style="transition-delay: 200ms;">
-                        <div class="bg-slate-700 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                        </div>
+                    <div class="scroll-animate p-8 rounded-xl transition-transform duration-300 hover:scale-105 glass-effect" style="transition-delay: 200ms;">
+                        <div class="bg-slate-700/50 w-12 h-12 rounded-lg flex items-center justify-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg></div>
                         <h4 class="text-xl font-bold text-white">Totalmente Personalizado</h4>
                         <p class="mt-2 text-gray-400">Textos, planos e toda a comunicação do bot são customizados para ter a cara da sua marca.</p>
                     </div>
@@ -164,37 +220,25 @@
         </section>
 
         <!-- Seção de Preços -->
-        <section id="precos" class="py-20 bg-slate-950/50">
+        <section id="precos" class="py-20">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
                     <h3 class="text-3xl md:text-4xl font-bold text-white">Comissionamento Transparente</h3>
                     <p class="mt-4 text-gray-400 max-w-2xl mx-auto">Sem mensalidade ou taxa de setup. Minha remuneração é uma porcentagem sobre o sucesso das suas vendas. Simples assim.</p>
                 </div>
                 <div class="flex flex-col md:flex-row justify-center gap-8">
-                    <!-- Plano 1 -->
-                    <div class="scroll-animate bg-slate-800 p-8 rounded-xl border border-slate-700 w-full md:w-1/3 transition-transform duration-300 hover:scale-105">
+                    <div class="scroll-animate p-8 rounded-xl w-full md:w-1/3 transition-transform duration-300 hover:scale-105 glass-effect">
                         <h4 class="text-2xl font-bold text-blue-400">Modelo Padrão</h4>
                         <p class="text-5xl font-black text-white mt-4">20%</p>
                         <p class="text-gray-400">sobre cada venda</p>
-                        <ul class="mt-6 space-y-2 text-gray-300">
-                            <li>✓ Ideal para quem quer começar rápido.</li>
-                            <li>✓ Sem necessidade de CNPJ.</li>
-                            <li>✓ Eu gerencio a conta de pagamentos e os impostos.</li>
-                            <li>✓ Você recebe seus lucros via PIX.</li>
-                        </ul>
+                        <ul class="mt-6 space-y-2 text-gray-300"><li>✓ Ideal para quem quer começar rápido.</li><li>✓ Sem necessidade de CNPJ.</li><li>✓ Eu gerencio a conta de pagamentos e os impostos.</li><li>✓ Você recebe seus lucros via PIX.</li></ul>
                     </div>
-                    <!-- Plano 2 -->
-                    <div class="scroll-animate bg-slate-800 p-8 rounded-xl border-2 border-blue-500 w-full md:w-1/3 shadow-2xl shadow-blue-500/10 transition-transform duration-300 hover:scale-105" style="transition-delay: 100ms;">
+                    <div class="scroll-animate p-8 rounded-xl border-2 border-blue-500 w-full md:w-1/3 shadow-2xl shadow-blue-500/10 transition-transform duration-300 hover:scale-105 glass-effect" style="transition-delay: 100ms;">
                          <span class="text-xs font-bold bg-blue-500 text-white py-1 px-3 rounded-full">MAIS VANTAJOSO</span>
                         <h4 class="text-2xl font-bold text-blue-400 mt-3">Modelo Próprio</h4>
                         <p class="text-5xl font-black text-white mt-4">14%</p>
                         <p class="text-gray-400">sobre cada venda</p>
-                        <ul class="mt-6 space-y-2 text-gray-300">
-                            <li>✓ Perfeito para negócios estabelecidos.</li>
-                            <li>✓ Requer CNPJ e conta Efí Bank própria.</li>
-                            <li>✓ O dinheiro vai direto para sua conta.</li>
-                            <li>✓ Menor taxa de comissão.</li>
-                        </ul>
+                        <ul class="mt-6 space-y-2 text-gray-300"><li>✓ Perfeito para negócios estabelecidos.</li><li>✓ Requer CNPJ e conta Efí Bank própria.</li><li>✓ O dinheiro vai direto para sua conta.</li><li>✓ Menor taxa de comissão.</li></ul>
                     </div>
                 </div>
             </div>
@@ -215,189 +259,106 @@
         <section id="contato" class="py-20 bg-blue-600">
             <div class="container mx-auto px-6 text-center">
                 <h3 class="text-3xl md:text-4xl font-bold text-white">Vamos automatizar seu sucesso?</h3>
-                <p class="mt-4 text-blue-200 max-w-2xl mx-auto">
-                    Me chame no Telegram para conversarmos sobre seu projeto. Sem compromisso.
-                </p>
+                <p class="mt-4 text-blue-200 max-w-2xl mx-auto">Me chame no Telegram para conversarmos sobre seu projeto. Sem compromisso.</p>
                 <div class="mt-8">
-                    <a href="https://t.me/paleoselli" target="_blank" class="bg-white text-blue-600 font-bold py-4 px-10 rounded-lg text-lg hover:bg-blue-100 transition-transform duration-300 hover:scale-105 inline-block">
-                        Falar com Gabriel
-                    </a>
+                    <a href="https://t.me/paleoselli" target="_blank" class="bg-white text-blue-600 font-bold py-4 px-10 rounded-lg text-lg hover:bg-blue-100 transition-transform duration-300 hover:scale-105 inline-block">Falar com Gabriel</a>
                 </div>
             </div>
         </section>
     </main>
 
     <!-- Rodapé -->
-    <footer class="bg-slate-950 py-6 border-t border-slate-800">
+    <footer class="bg-slate-950 py-6 border-t border-slate-800 relative z-10">
         <div class="container mx-auto px-6 text-center text-gray-500">
             <p>&copy; 2024 Gabriel Pachis. Todos os direitos reservados.</p>
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const chatWindow = document.getElementById('chat-window');
-            const buttonArea = document.getElementById('button-area');
+            // Configuração do Particles.js
+            particlesJS("particles-js", {
+                "particles": { "number": { "value": 50, "density": { "enable": true, "value_area": 800 } }, "color": { "value": "#ffffff" }, "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 } }, "opacity": { "value": 0.2, "random": false, "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false } }, "size": { "value": 3, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } }, "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.2, "width": 1 }, "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } } },
+                "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true }, "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 0.5 } }, "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 }, "repulse": { "distance": 200, "duration": 0.4 }, "push": { "particles_nb": 4 }, "remove": { "particles_nb": 2 } } },
+                "retina_detect": true
+            });
 
             // Lógica da simulação de chat
+            const chatWindow = document.getElementById('chat-window');
+            const buttonArea = document.getElementById('button-area');
             const conversation = {
-                start: {
-                    botMessages: ["Oi! 👋", "Você tá entrando num espaço feito só pra quem curte exclusividade.", "Clica aí e vem fazer parte disso."],
-                    options: [{ text: "✨ Quero Acesso Exclusivo", action: 'showPlans' }, { text: "📞 Preciso de Ajuda", action: 'showSupport' }]
-                },
-                showPlans: {
-                    userMessage: "✨ Quero Acesso Exclusivo",
-                    botMessages: ["✨ *Acesso ao Conteúdo Exclusivo*\n\nPara ter acesso a todo o conteúdo, escolha um dos planos abaixo e faça parte do nosso canal privado:"],
-                    options: [{ text: "� Acesso Mensal - R$ 49,90", action: 'showTerms', plan: 'mensal' }, { text: "🌟 Acesso Permanente - R$ 299,90", action: 'showTerms', plan: 'vitalicio' }, { text: "⬅️ Voltar", action: 'start' }]
-                },
-                showTerms: {
-                    userMessage: (plan) => plan === 'mensal' ? "🌙 Acesso Mensal - R$ 49,90" : "🌟 Acesso Permanente - R$ 299,90",
-                    botMessages: ["⚠️ *Quase lá... Leia os Termos*\n\nAntes de prosseguir, é importante que você leia e concorde com os nossos termos de uso. Isso garante que tudo fique claro entre a gente."],
-                    options: [{ text: "Ler Termos de Uso", action: 'openLink' }, { text: "✅ Li e aceito os Termos", action: 'showPayment' }, { text: "⬅️ Voltar", action: 'showPlans' }]
-                },
-                showPayment: {
-                    userMessage: "✅ Li e aceito os Termos",
-                    botMessages: ["Termos aceitos! Preparando seu acesso...", "🔑 *Seu Acesso ao Canal*\n\nPara finalizar, use o *PIX Copia e Cola* abaixo. Seu acesso será liberado automaticamente assim que o pagamento for confirmado.\n\nApós pagar, clique em *'Já paguei'* para fazer a verificação."],
-                    options: [{ text: "✅ Já paguei, verificar acesso", action: 'verifyPayment' }],
-                    showPix: true
-                },
-                verifyPayment: {
-                    userMessage: "✅ Já paguei, verificar acesso",
-                    botMessages: ["Verificando seu pagamento, um momento...", "✅ Pagamento confirmado!\n\n<b>Acesso Liberado!</b>\n\nPronto! Seu acesso está garantido. Te vejo no canal!\n\nClique no link abaixo para entrar:\n<a href='#' class='text-blue-300 underline'>https://t.me/joinchat/AbCdEfGhIjKlMnOp</a>\n\n<i>Atenção: O link é de uso único e pessoal.</i>"],
-                    options: [{ text: "🔄 Reiniciar Simulação", action: 'start' }]
-                },
-                showSupport: {
-                    userMessage: "📞 Preciso de Ajuda",
-                    botMessages: ["Para obter ajuda, entre em contato com nosso suporte. O link será aberto em uma nova aba."],
-                    options: [{ text: "Falar com Suporte", action: 'openLink' }, { text: "⬅️ Voltar", action: 'start' }]
-                }
+                start: { botMessages: ["Oi! 👋", "Você tá entrando num espaço feito só pra quem curte exclusividade.", "Clica aí e vem fazer parte disso."], options: [{ text: "✨ Quero Acesso Exclusivo", action: 'showPlans' }, { text: "📞 Preciso de Ajuda", action: 'showSupport' }] },
+                showPlans: { userMessage: "✨ Quero Acesso Exclusivo", botMessages: ["✨ *Acesso ao Conteúdo Exclusivo*\n\nPara ter acesso a todo o conteúdo, escolha um dos planos abaixo e faça parte do nosso canal privado:"], options: [{ text: "🌙 Acesso Mensal - R$ 49,90", action: 'showTerms', plan: 'mensal' }, { text: "🌟 Acesso Permanente - R$ 299,90", action: 'showTerms', plan: 'vitalicio' }, { text: "⬅️ Voltar", action: 'start' }] },
+                showTerms: { userMessage: (plan) => plan === 'mensal' ? "🌙 Acesso Mensal - R$ 49,90" : "🌟 Acesso Permanente - R$ 299,90", botMessages: ["⚠️ *Quase lá... Leia os Termos*\n\nAntes de prosseguir, é importante que você leia e concorde com os nossos termos de uso. Isso garante que tudo fique claro entre a gente."], options: [{ text: "Ler Termos de Uso", action: 'openLink' }, { text: "✅ Li e aceito os Termos", action: 'showPayment' }, { text: "⬅️ Voltar", action: 'showPlans' }] },
+                showPayment: { userMessage: "✅ Li e aceito os Termos", botMessages: ["Termos aceitos! Preparando seu acesso...", "🔑 *Seu Acesso ao Canal*\n\nPara finalizar, use o *PIX Copia e Cola* abaixo. Seu acesso será liberado automaticamente assim que o pagamento for confirmado.\n\nApós pagar, clique em *'Já paguei'* para fazer a verificação."], options: [{ text: "✅ Já paguei, verificar acesso", action: 'verifyPayment' }], showPix: true },
+                verifyPayment: { userMessage: "✅ Já paguei, verificar acesso", botMessages: ["Verificando seu pagamento, um momento...", "✅ Pagamento confirmado!\n\n<b>Acesso Liberado!</b>\n\nPronto! Seu acesso está garantido. Te vejo no canal!\n\nClique no link abaixo para entrar:\n<a href='#' class='text-blue-300 underline'>https://t.me/joinchat/AbCdEfGhIjKlMnOp</a>\n\n<i>Atenção: O link é de uso único e pessoal.</i>"], options: [{ text: "🔄 Reiniciar Simulação", action: 'start' }] },
+                showSupport: { userMessage: "📞 Preciso de Ajuda", botMessages: ["Para obter ajuda, entre em contato com nosso suporte. O link será aberto em uma nova aba."], options: [{ text: "Falar com Suporte", action: 'openLink' }, { text: "⬅️ Voltar", action: 'start' }] }
             };
-
-            function showTypingIndicator() {
-                const typingDiv = document.createElement('div');
-                typingDiv.id = 'typing-indicator';
-                typingDiv.className = 'chat-message self-start max-w-xs';
-                typingDiv.innerHTML = `<div class="bg-blue-600 text-white p-3 rounded-t-xl rounded-br-xl"><div class="flex items-center space-x-1"><span class="typing-dot"></span><span class="typing-dot" style="animation-delay: 0.2s;"></span><span class="typing-dot" style="animation-delay: 0.4s;"></span></div></div>`;
-                chatWindow.appendChild(typingDiv);
-                chatWindow.scrollTop = chatWindow.scrollHeight;
-            }
-
-            function hideTypingIndicator() {
-                const indicator = document.getElementById('typing-indicator');
-                if (indicator) indicator.remove();
-            }
-
-            function addBotMessage(text) {
-                return new Promise(resolve => {
-                    setTimeout(() => {
-                        const messageDiv = document.createElement('div');
-                        messageDiv.className = 'chat-message self-start max-w-xs';
-                        const contentDiv = document.createElement('div');
-                        contentDiv.className = 'bg-blue-600 text-white p-3 rounded-t-xl rounded-br-xl';
-                        contentDiv.innerHTML = text.replace(/\*(.*?)\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
-                        messageDiv.appendChild(contentDiv);
-                        chatWindow.appendChild(messageDiv);
-                        chatWindow.scrollTop = chatWindow.scrollHeight;
-                        resolve();
-                    }, 800);
-                });
-            }
-            
-            function addUserMessage(text) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'chat-message self-end max-w-xs';
-                const contentDiv = document.createElement('div');
-                contentDiv.className = 'bg-slate-600 text-white p-3 rounded-t-xl rounded-bl-xl';
-                contentDiv.textContent = text;
-                messageDiv.appendChild(contentDiv);
-                chatWindow.appendChild(messageDiv);
-                chatWindow.scrollTop = chatWindow.scrollHeight;
-            }
-
-            function addPixCode() {
-                 return new Promise(resolve => {
-                    setTimeout(() => {
-                        const pixDiv = document.createElement('div');
-                        pixDiv.className = 'chat-message self-start w-full';
-                        pixDiv.innerHTML = `<div class="bg-slate-900 p-3 rounded-lg border border-slate-700 text-center"><pre class="text-xs text-gray-300 whitespace-pre-wrap break-all">00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5925GABRIEL PACHIS AUTOMATION6009SAO PAULO62070503***6304E4A9</pre><button onclick="copyPix()" class="mt-2 bg-slate-700 hover:bg-slate-600 text-white text-sm py-1 px-3 rounded-md transition-colors">Copiar Código</button></div>`;
-                        chatWindow.appendChild(pixDiv);
-                        chatWindow.scrollTop = chatWindow.scrollHeight;
-                        resolve();
-                    }, 600);
-                });
-            }
-
-            window.copyPix = function() {
-                const pixCode = "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5925GABRIEL PACHIS AUTOMATION6009SAO PAULO62070503***6304E4A9";
-                const tempInput = document.createElement('textarea');
-                tempInput.value = pixCode;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                // Substituindo o alert por um feedback visual mais elegante
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = 'Copiado!';
-                btn.classList.add('bg-green-500');
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.classList.remove('bg-green-500');
-                }, 2000);
-            }
-
-            function showOptions(options, plan) {
-                buttonArea.innerHTML = '';
-                const buttonContainer = document.createElement('div');
-                buttonContainer.className = 'grid grid-cols-1 gap-2';
-                options.forEach(option => {
-                    const button = document.createElement('button');
-                    button.className = 'w-full text-left p-3 rounded-lg transition-colors text-sm font-medium bg-slate-700 hover:bg-slate-600 text-white';
-                    if (option.action === 'openLink') {
-                        button.textContent = option.text;
-                        button.onclick = () => alert("Em um bot real, isso abriria um link externo.");
-                    } else {
-                        button.textContent = option.text;
-                        button.onclick = () => handleAction(option.action, option.plan || plan);
-                    }
-                    buttonContainer.appendChild(button);
-                });
-                buttonArea.appendChild(buttonContainer);
-            }
-
-            async function handleAction(actionName, plan) {
-                if (actionName === 'start') {
-                    chatWindow.innerHTML = '';
-                    buttonArea.innerHTML = '';
-                }
-                const step = conversation[actionName];
-                if (!step) return;
-                if (step.userMessage) {
-                    const userMsg = typeof step.userMessage === 'function' ? step.userMessage(plan) : step.userMessage;
-                    addUserMessage(userMsg);
-                }
-                buttonArea.innerHTML = '';
-                showTypingIndicator();
-                for (const msg of step.botMessages) {
-                    await addBotMessage(msg);
-                }
-                hideTypingIndicator();
-                if (step.showPix) await addPixCode();
-                if (step.options) showOptions(step.options, plan);
-            }
-
+            function showTypingIndicator() { const typingDiv = document.createElement('div'); typingDiv.id = 'typing-indicator'; typingDiv.className = 'chat-message self-start max-w-xs'; typingDiv.innerHTML = `<div class="bg-blue-600/80 text-white p-3 rounded-t-xl rounded-br-xl"><div class="flex items-center space-x-1"><span class="typing-dot"></span><span class="typing-dot" style="animation-delay: 0.2s;"></span><span class="typing-dot" style="animation-delay: 0.4s;"></span></div></div>`; chatWindow.appendChild(typingDiv); chatWindow.scrollTop = chatWindow.scrollHeight; }
+            function hideTypingIndicator() { const indicator = document.getElementById('typing-indicator'); if (indicator) indicator.remove(); }
+            function addBotMessage(text) { return new Promise(resolve => { setTimeout(() => { const messageDiv = document.createElement('div'); messageDiv.className = 'chat-message self-start max-w-xs'; const contentDiv = document.createElement('div'); contentDiv.className = 'bg-blue-600/80 text-white p-3 rounded-t-xl rounded-br-xl'; contentDiv.innerHTML = text.replace(/\*(.*?)\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>'); messageDiv.appendChild(contentDiv); chatWindow.appendChild(messageDiv); chatWindow.scrollTop = chatWindow.scrollHeight; resolve(); }, 800); }); }
+            function addUserMessage(text) { const messageDiv = document.createElement('div'); messageDiv.className = 'chat-message self-end max-w-xs'; const contentDiv = document.createElement('div'); contentDiv.className = 'bg-slate-600/80 text-white p-3 rounded-t-xl rounded-bl-xl'; contentDiv.textContent = text; messageDiv.appendChild(contentDiv); chatWindow.appendChild(messageDiv); chatWindow.scrollTop = chatWindow.scrollHeight; }
+            function addPixCode() { return new Promise(resolve => { setTimeout(() => { const pixDiv = document.createElement('div'); pixDiv.className = 'chat-message self-start w-full'; pixDiv.innerHTML = `<div class="bg-slate-900/80 p-3 rounded-lg text-center"><pre class="text-xs text-gray-300 whitespace-pre-wrap break-all">00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5925GABRIEL PACHIS AUTOMATION6009SAO PAULO62070503***6304E4A9</pre><button onclick="copyPix(event)" class="mt-2 bg-slate-700 hover:bg-slate-600 text-white text-sm py-1 px-3 rounded-md transition-colors">Copiar Código</button></div>`; chatWindow.appendChild(pixDiv); chatWindow.scrollTop = chatWindow.scrollHeight; resolve(); }, 600); }); }
+            window.copyPix = function(event) { const pixCode = "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-4266141740005204000053039865802BR5925GABRIEL PACHIS AUTOMATION6009SAO PAULO62070503***6304E4A9"; const tempInput = document.createElement('textarea'); tempInput.value = pixCode; document.body.appendChild(tempInput); tempInput.select(); document.execCommand('copy'); document.body.removeChild(tempInput); const btn = event.target; const originalText = btn.textContent; btn.textContent = 'Copiado!'; btn.classList.add('bg-green-500'); setTimeout(() => { btn.textContent = originalText; btn.classList.remove('bg-green-500'); }, 2000); }
+            function showOptions(options, plan) { buttonArea.innerHTML = ''; const buttonContainer = document.createElement('div'); buttonContainer.className = 'grid grid-cols-1 gap-2'; options.forEach(option => { const button = document.createElement('button'); button.className = 'w-full text-left p-3 rounded-lg transition-colors text-sm font-medium bg-slate-700/50 hover:bg-slate-600/50 text-white'; if (option.action === 'openLink') { button.textContent = option.text; button.onclick = () => alert("Em um bot real, isso abriria um link externo."); } else { button.textContent = option.text; button.onclick = () => handleAction(option.action, option.plan || plan); } buttonContainer.appendChild(button); }); buttonArea.appendChild(buttonContainer); }
+            async function handleAction(actionName, plan) { if (actionName === 'start') { chatWindow.innerHTML = ''; buttonArea.innerHTML = ''; } const step = conversation[actionName]; if (!step) return; if (step.userMessage) { const userMsg = typeof step.userMessage === 'function' ? step.userMessage(plan) : step.userMessage; addUserMessage(userMsg); } buttonArea.innerHTML = ''; showTypingIndicator(); for (const msg of step.botMessages) { await addBotMessage(msg); } hideTypingIndicator(); if (step.showPix) await addPixCode(); if (step.options) showOptions(step.options, plan); }
             handleAction('start');
 
             // Lógica para animações de scroll
             const animatedElements = document.querySelectorAll('.scroll-animate');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
+            const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }); }, { threshold: 0.1 });
             animatedElements.forEach(el => observer.observe(el));
+
+            // CORREÇÃO: Animação de texto letra por letra
+            const headline = document.getElementById('main-headline');
+            const childNodes = Array.from(headline.childNodes);
+            headline.innerHTML = '';
+            let charIndex = 0;
+
+            childNodes.forEach(node => {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    const text = node.textContent;
+                    // Divide o texto por espaços, mas mantém os espaços no array
+                    const parts = text.split(/(\s+)/);
+                    parts.forEach(part => {
+                        if (part.match(/\s+/)) {
+                            // Se for um espaço, apenas adiciona
+                            headline.appendChild(document.createTextNode(part));
+                        } else {
+                            // Se for uma palavra, anima as letras
+                            part.split('').forEach(char => {
+                                const span = document.createElement('span');
+                                span.className = 'animated-letter';
+                                span.textContent = char;
+                                span.style.animationDelay = `${charIndex * 0.03}s`;
+                                headline.appendChild(span);
+                                charIndex++;
+                            });
+                        }
+                    });
+                } else if (node.nodeType === Node.ELEMENT_NODE) {
+                    // Recria o elemento (ex: o <span>)
+                    const wrapperSpan = node.cloneNode(false);
+                    const text = node.textContent;
+                    const parts = text.split(/(\s+)/);
+                     parts.forEach(part => {
+                        if (part.match(/\s+/)) {
+                            wrapperSpan.appendChild(document.createTextNode(part));
+                        } else {
+                            part.split('').forEach(char => {
+                                const span = document.createElement('span');
+                                span.className = 'animated-letter';
+                                span.textContent = char;
+                                span.style.animationDelay = `${charIndex * 0.03}s`;
+                                wrapperSpan.appendChild(span);
+                                charIndex++;
+                            });
+                        }
+                    });
+                    headline.appendChild(wrapperSpan);
+                }
+            });
         });
     </script>
 </body>
